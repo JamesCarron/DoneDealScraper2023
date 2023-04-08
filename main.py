@@ -5,23 +5,24 @@ import time
 import math
 
 """
+Takes a Donedeal search result pages and outputs a json of the summary info for each search result
+
+
 Donedeal search results are 30 per page
 https://www.donedeal.ie/cars/Ford/Fiesta?sort=publishdatedesc&start=0
 Spotlights will make this a pain in the ass. They can cause duplicates and often ignore search filters
 
 Plan:
-Get total number of results -       get_number_of_donedeal_search_page_results()
+TODO: scrape_donedeal_url()
+TODO: Get total number of results -                 get_number_of_donedeal_search_results()
 Load 30 search results                    
-    Get all search results in page  get_search_results()
-    Get summary attributes of each entry    get_donedeal_result_attribs()
-    Delay a time 2s? To prevent being banned. 
-        +- random time interval
-
-
+    TODO: Get all search results in page            get_search_results()
+    TODO: Get summary attributes of each entry      parse_donedeal_search_result()
+    TODO: Delay a time 2s? To prevent being banned. +- random time interval   
 """
 
 
-def get_search_results():
+def get_search_results(url: str) -> list:
     """
     Returns a list of BS4 objects. One for each search entry
 
@@ -95,11 +96,11 @@ def scrape_donedeal_url(
     """
     # TODO donedealsortoder should probably be an enum
 
-    results = get_number_of_donedeal_search_results()
+    results = get_number_of_donedeal_search_results(url)
 
-    for page in math.ceil(results / results_per_page):
+    for page in range(math.ceil(results / results_per_page)):
         # I know this can be done in one fstring but I think this is more legible
-        page = url + f"sort={donedealsortorder}" + f"&start={page*30:d}"
+        page = url + f"sort={donedealsortorder}" + rf"&start={page*30:d}"
         search_results = get_search_results(url)
         search_summary_attribs = [
             parse_donedeal_search_result(search_result)
